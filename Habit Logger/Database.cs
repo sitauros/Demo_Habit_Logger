@@ -1,4 +1,7 @@
-﻿internal class Database
+﻿namespace HabitLogger
 {
-
+    internal class Database
+    {
+        // TODO
+    }
 }
