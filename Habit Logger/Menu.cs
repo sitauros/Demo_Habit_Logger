@@ -4,12 +4,7 @@ namespace HabitLogger
 {
     internal class Menu
     {
-        static void Main()
-        {
-            printMenu();
-        }
-
-        private static void printMenu()
+        internal static void PrintMenu()
         {
             Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Welcome to the Junior Unicorn Habit Logger. 
@@ -25,17 +20,40 @@ Enter a number below:
 0) Quit program.
 
 Your input: ");
-            Console.ReadLine();
+            int result;
+            bool isValidInput = int.TryParse(Console.ReadLine(), out result);
+
+            while (!isValidInput || result < 0 || result > 4) {
+                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine("Your input: ");
+                isValidInput = int.TryParse(Console.ReadLine(), out result);
+            }
+
+            switch (result)
+            {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 0:
+                    ExitProgram();
+                    break;         
+            }
         }
 
-        private static void exit()
+
+        private static void ExitProgram()
         {
-            //TODO
+            Environment.Exit(1);
         }
 
         private void CreateDatabase()
         {
-            string connectionString = "Data Source=habit_Tracker.db";
+            string connectionString = "Data Source=unicornPride.db";
             /*Creating a connection passing the connection string as an argument
             This will create the database for you, there's no need to manually create it.
             And no need to use File.Create().*/
