@@ -1,15 +1,12 @@
 ﻿namespace HabitLogger
 {
     internal class GameEngine
-    {
+    {  
         static void Main()
         {
-            bool continueGame = true;
-            while (continueGame)
-            {
-                Console.Clear();
-                Menu.PrintMenu();
-            }
+            Database unicornDB = new Database("Data Source = UnicornPride.db");
+            unicornDB.CreateDatabase();
+            Menu.PrintMainMenu();
         }
     }
 }
