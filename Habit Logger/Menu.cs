@@ -1,11 +1,10 @@
-﻿using Microsoft.Data.Sqlite;
-
-namespace HabitLogger
+﻿namespace HabitLogger
 {
     internal class Menu
     {
-        internal static void PrintMenu()
+        internal static void PrintMainMenu()
         {
+            Console.Clear();
             Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Welcome to the Junior Unicorn Habit Logger. 
 Discover companies across the globe with ravenous desires for new Junior Unicorns.
@@ -20,24 +19,22 @@ Enter a number below:
 0) Quit program.
 
 Your input: ");
-            int result;
-            bool isValidInput = int.TryParse(Console.ReadLine(), out result);
 
-            while (!isValidInput || result < 0 || result > 4) {
-                Console.WriteLine("Invalid input. Please try again.");
-                Console.WriteLine("Your input: ");
-                isValidInput = int.TryParse(Console.ReadLine(), out result);
-            }
+            var result = validateUserInteger(0, 4);
 
             switch (result)
             {
                 case 1:
+                    ListAllCompanies();
                     break;
                 case 2:
+                    AddNewCompany();
                     break;
                 case 3:
+                    UpdateCompany();
                     break;
                 case 4:
+                    DeleteCompany();
                     break;
                 case 0:
                     ExitProgram();
@@ -45,48 +42,72 @@ Your input: ");
             }
         }
 
+        internal static int validateUserInteger(int minValue, int maxValue)
+        {
+            int result;
+            var input = Console.ReadLine();
+            bool isValidInput = int.TryParse(input, out result);
+
+            while (!isValidInput || result < minValue || result > maxValue)
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine("Your input: ");
+                isValidInput = int.TryParse(Console.ReadLine(), out result);
+            }
+
+            return result;
+        }
+
+        internal static string validateUserString()
+        {
+            string input = Console.ReadLine();
+
+            while (String.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine("Your input: ");
+                input = Console.ReadLine();
+            }
+
+            return input;
+        }
+
+        private static void ListAllCompanies()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void AddNewCompany()
+        {
+            Console.Clear();
+            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Add a new company to the Unicorn Pride Database
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+1) Enter the company's name: ");
+            string companyName = validateUserString();
+            Console.WriteLine("2) Enter desired coding skill: ");
+            string skill = validateUserString();
+            Console.WriteLine("3) Enter years of experience required (max: 10): ");
+            int yearsOfExp = validateUserInteger(0, 10);
+            Console.WriteLine("4) Enter company perk: ");
+            string perk = validateUserString();
+
+            PrintMainMenu();
+        }
+
+        private static void UpdateCompany()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void DeleteCompany()
+        {
+            throw new NotImplementedException();
+        }
 
         private static void ExitProgram()
         {
             Environment.Exit(1);
         }
-
-        private void CreateDatabase()
-        {
-            string connectionString = "Data Source=unicornPride.db";
-            /*Creating a connection passing the connection string as an argument
-            This will create the database for you, there's no need to manually create it.
-            And no need to use File.Create().*/
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-                //Creating the command that will be sent to the database
-                using (var tableCmd = connection.CreateCommand())
-                {
-
-                    //Declaring what is that command (in SQL syntax)
-                    tableCmd.CommandText =
-                        @"CREATE TABLE IF NOT EXISTS yourHabit (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Date TEXT,
-                    Quantity INTEGER
-                    )";
-
-                    // Executing the command, which isn't a query, it's not asking to return data from the database.
-                    tableCmd.ExecuteNonQuery();
-                }
-                // We don't need to close the connection or the command. The 'using statement' does that for us.
-            }
-
-            /* Once we check if the database exists and create it (or not),
-            we will call the next method, which will handle the user's input. Your next step is to create this method*/
-            GetUserInput();
-        }
-
-        void GetUserInput()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
