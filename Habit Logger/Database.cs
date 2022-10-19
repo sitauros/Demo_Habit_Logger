@@ -1,6 +1,5 @@
-﻿using ConsoleTableExt;
+﻿using System.Data;
 using Microsoft.Data.Sqlite;
-using System.Data;
 
 namespace HabitLogger
 {

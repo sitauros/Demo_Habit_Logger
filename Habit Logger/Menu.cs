@@ -1,7 +1,5 @@
-﻿using ConsoleTableExt;
-using System;
-using System.Data;
-using System.Net.Security;
+﻿using System.Data;
+using ConsoleTableExt;
 
 namespace HabitLogger
 {
