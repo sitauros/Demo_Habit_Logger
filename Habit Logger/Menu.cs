@@ -60,7 +60,7 @@ Your input: ");
 
         internal static string validateUserString()
         {
-            string input = Console.ReadLine();
+            string? input = Console.ReadLine();
 
             while (String.IsNullOrEmpty(input))
             {
@@ -92,7 +92,8 @@ Add a new company to the Unicorn Pride Database
             Console.WriteLine("4) Enter company perk: ");
             string perk = validateUserString();
 
-            PrintMainMenu();
+            Database.AddNewCompany(companyName, skill, yearsOfExp, perk);
+            BackToMainMenu("New company added.");
         }
 
         private static void UpdateCompany()
@@ -108,6 +109,16 @@ Add a new company to the Unicorn Pride Database
         private static void ExitProgram()
         {
             Environment.Exit(1);
+        }
+
+        private static void BackToMainMenu(string message)
+        {
+            Console.WriteLine("\n" + "-----------------------------------------------------------------------------------");
+            Console.WriteLine(message);
+            Console.WriteLine("Press any key to return to main menu.");
+            Console.WriteLine("-----------------------------------------------------------------------------------");
+            Console.ReadLine();
+            PrintMainMenu();
         }
     }
 }

@@ -4,8 +4,8 @@
     {  
         static void Main()
         {
-            Database unicornDB = new Database("Data Source = UnicornPride.db");
-            unicornDB.CreateDatabase();
+            Database.ConnectionString = "Data Source = UnicornPride.db";
+            Database.CreateDatabase();
             Menu.PrintMainMenu();
         }
     }
