@@ -1,5 +1,7 @@
 ﻿using ConsoleTableExt;
+using System;
 using System.Data;
+using System.Net.Security;
 
 namespace HabitLogger
 {
@@ -99,18 +101,58 @@ Your input: ");
 
         private static void ListAllCompanies()
         {
+            bool continueLoop = true;
             int ID_offset = 0;
             int currentPage = 1;
             int totalRecords = Database.GetRecordCount();
             int numPages = 1 + (totalRecords / 5);
 
-            while (currentPage <= numPages)
+            var resultSet = Database.RetrievePageAfterID(ID_offset);
+            FormatPage(resultSet, numPages, currentPage);
+
+            while (continueLoop)
             {
-                var resultSet = Database.RetrievePageAfterID(ID_offset);
-                FormatPage(resultSet, numPages, currentPage);
-                currentPage = currentPage + 1;
-                ID_offset = Convert.ToInt32(resultSet.Rows[resultSet.Rows.Count - 1]["ID"]);
+                int minValue = 1;
+                int maxValue = 1;
+                Console.WriteLine("Enter a number below: ");
+
+                if (currentPage > 1)
+                {
+                    Console.WriteLine("0) Return to previous page. ");
+                    minValue = 0;
+                }
+
+                Console.WriteLine("1) Return to main menu.");
+
+                if (currentPage < numPages)
+                {
+                    Console.WriteLine("2) Advance to next page. ");
+                    maxValue = 2;
+                }
+                
+                var result = validateUserInteger(minValue, maxValue);
+
+                switch (result)
+                {
+                    case 0:
+                        currentPage = currentPage - 1;
+                        ID_offset = Convert.ToInt32(resultSet.Rows[0]["ID"]);
+                        resultSet = Database.RetrievePageBeforeID(ID_offset);
+                        FormatPage(resultSet, numPages, currentPage);
+                        break;
+                    case 1:
+                        continueLoop = false;
+                        break;
+                    case 2:
+                        currentPage = currentPage + 1;
+                        ID_offset = Convert.ToInt32(resultSet.Rows[4]["ID"]);
+                        resultSet = Database.RetrievePageAfterID(ID_offset);
+                        FormatPage(resultSet, numPages, currentPage);
+                        break;
+                }
             }
+
+            PrintMainMenu();
         }
         
         private static void FormatPage(DataTable resultSet, int numPages, int currentPage)
@@ -128,9 +170,6 @@ Now viewing page " + currentPage + " of " + numPages +
                .WithCharMapDefinition(CharMapDefinition.FramePipDefinition)
                .WithCharMapDefinition(CharMapDefinition.FramePipDefinition, CharMapPositions)
                .ExportAndWriteLine(TableAligntment.Center);
-
-            Console.WriteLine("Press any key to view next page.");
-            Console.ReadLine();
         }
 
         private static void AddNewCompany()

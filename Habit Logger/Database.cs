@@ -38,6 +38,30 @@ namespace HabitLogger
             return count;
         }
 
+        internal static DataTable RetrievePageBeforeID(int ID_offset)
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                    SELECT * FROM JuniorUnicornFirms
+                    WHERE ID < $ID_offset
+                    ORDER BY ID DESC
+                    LIMIT 5
+                    ";
+            command.Parameters.AddWithValue("ID_offset", ID_offset);
+
+            using SqliteDataReader reader = command.ExecuteReader();
+
+            // Rows returned are in descending order
+            DataTable resultSet = new DataTable();
+            resultSet.Load(reader);
+            resultSet.DefaultView.Sort = "ID ASC";
+            resultSet = resultSet.DefaultView.ToTable();
+
+            return resultSet;
+        }
+
         internal static DataTable RetrievePageAfterID(int ID_offset)
         {
             using var connection = new SqliteConnection(ConnectionString);
@@ -46,7 +70,7 @@ namespace HabitLogger
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
                     WHERE ID > $ID_offset
-                    ORDER BY ID
+                    ORDER BY ID ASC
                     LIMIT 5;
                     ";
             command.Parameters.AddWithValue("ID_offset", ID_offset);
