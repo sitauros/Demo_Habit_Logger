@@ -1,7 +1,32 @@
-﻿namespace HabitLogger
+﻿using ConsoleTableExt;
+using System.Data;
+
+namespace HabitLogger
 {
     internal class Menu
     {
+        internal static Dictionary<HeaderCharMapPositions, char> CharMapPositions = new Dictionary<HeaderCharMapPositions, char> {
+            {HeaderCharMapPositions.TopLeft, '╒' },
+            {HeaderCharMapPositions.TopCenter, '═' },
+            {HeaderCharMapPositions.TopRight, '╕' },
+            {HeaderCharMapPositions.BottomLeft, '╞' },
+            {HeaderCharMapPositions.BottomCenter, '╤' },
+            {HeaderCharMapPositions.BottomRight, '╡' },
+            {HeaderCharMapPositions.BorderTop, '═' },
+            {HeaderCharMapPositions.BorderRight, '│' },
+            {HeaderCharMapPositions.BorderBottom, '═' },
+            {HeaderCharMapPositions.BorderLeft, '│' },
+            {HeaderCharMapPositions.Divider, ' ' },
+        };
+
+        internal static Dictionary<int, TextAligntment> TextAlignments = new Dictionary<int, TextAligntment> {
+            {0, TextAligntment.Center},
+            {1, TextAligntment.Center},
+            {2, TextAligntment.Center},
+            {3, TextAligntment.Center},
+            {4, TextAligntment.Center}
+        };
+
         internal static void PrintMainMenu()
         {
             Console.Clear();
@@ -74,7 +99,38 @@ Your input: ");
 
         private static void ListAllCompanies()
         {
-            throw new NotImplementedException();
+            int ID_offset = 0;
+            int currentPage = 1;
+            int totalRecords = Database.GetRecordCount();
+            int numPages = 1 + (totalRecords / 5);
+
+            while (currentPage <= numPages)
+            {
+                var resultSet = Database.RetrievePageAfterID(ID_offset);
+                FormatPage(resultSet, numPages, currentPage);
+                currentPage = currentPage + 1;
+                ID_offset = Convert.ToInt32(resultSet.Rows[resultSet.Rows.Count - 1]["ID"]);
+            }
+        }
+        
+        private static void FormatPage(DataTable resultSet, int numPages, int currentPage)
+        {
+            Console.Clear();
+            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Showing companies listed in the Unicorn Pride Database
+Now viewing page " + currentPage + " of " + numPages +
+"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=" + "\n");
+
+            ConsoleTableBuilder
+               .From(resultSet)
+               .WithColumn("Id", "Company", "Skill", "Years of Exp.", "Perk")
+               .WithTextAlignment(TextAlignments)
+               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition)
+               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition, CharMapPositions)
+               .ExportAndWriteLine(TableAligntment.Center);
+
+            Console.WriteLine("Press any key to view next page.");
+            Console.ReadLine();
         }
 
         private static void AddNewCompany()

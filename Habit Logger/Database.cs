@@ -1,5 +1,6 @@
 ﻿using ConsoleTableExt;
 using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace HabitLogger
 {
@@ -23,19 +24,39 @@ namespace HabitLogger
             command.ExecuteNonQuery();
         }
 
-        internal static void ListAllCompanies()
+        internal static int GetRecordCount()
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                    SELECT COUNT(*) FROM JuniorUnicornFirms
+                    ";
+
+            int count = Convert.ToInt32((Int64?)command.ExecuteScalar());
+
+            return count;
+        }
+
+        internal static DataTable RetrievePageAfterID(int ID_offset)
         {
             using var connection = new SqliteConnection(ConnectionString);
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
-                    LIMIT 5
-                ";
-
+                    WHERE ID > $ID_offset
+                    ORDER BY ID
+                    LIMIT 5;
+                    ";
+            command.Parameters.AddWithValue("ID_offset", ID_offset);
+            
             using SqliteDataReader reader = command.ExecuteReader();
-            Console.WriteLine("HERE");
-            Console.ReadLine();
+
+            DataTable resultSet = new DataTable();
+            resultSet.Load(reader);
+
+            return resultSet;
         }
 
         internal static void AddNewCompany(string name, string skill, int yearsOfExp, string perk)
