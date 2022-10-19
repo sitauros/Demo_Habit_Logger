@@ -45,7 +45,7 @@ Enter a number below:
 
 Your input: ");
 
-            var result = validateUserInteger(0, 4);
+            var result = ValidateUserInteger(0, 4);
 
             switch (result)
             {
@@ -67,7 +67,7 @@ Your input: ");
             }
         }
 
-        internal static int validateUserInteger(int minValue, int maxValue)
+        internal static int ValidateUserInteger(int minValue, int maxValue)
         {
             int result;
             var input = Console.ReadLine();
@@ -83,7 +83,7 @@ Your input: ");
             return result;
         }
 
-        internal static string validateUserString()
+        internal static string ValidateUserString()
         {
             string? input = Console.ReadLine();
 
@@ -128,7 +128,7 @@ Your input: ");
                     maxValue = 2;
                 }
                 
-                var result = validateUserInteger(minValue, maxValue);
+                var result = ValidateUserInteger(minValue, maxValue);
 
                 switch (result)
                 {
@@ -177,13 +177,13 @@ Now viewing page " + currentPage + " of " + numPages +
 Add a new company to the Unicorn Pride Database
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 1) Enter the company's name: ");
-            string companyName = validateUserString();
+            string companyName = ValidateUserString();
             Console.WriteLine("2) Enter desired coding skill: ");
-            string skill = validateUserString();
+            string skill = ValidateUserString();
             Console.WriteLine("3) Enter years of experience required (max: 10): ");
-            int yearsOfExp = validateUserInteger(0, 10);
+            int yearsOfExp = ValidateUserInteger(0, 10);
             Console.WriteLine("4) Enter company perk: ");
-            string perk = validateUserString();
+            string perk = ValidateUserString();
 
             Database.AddNewCompany(companyName, skill, yearsOfExp, perk);
             BackToMainMenu("New company added.");
