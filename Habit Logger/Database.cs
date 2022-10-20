@@ -14,7 +14,7 @@ namespace HabitLogger
             var command = connection.CreateCommand();
             command.CommandText = @"
                     CREATE TABLE IF NOT EXISTS JuniorUnicornFirms (
-                        ID              INTEGER     PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        CompanyID       INTEGER     PRIMARY KEY AUTOINCREMENT NOT NULL,
                         Name            TEXT        NOT NULL,
                         DesiredSkill    TEXT        NOT NULL,
                         YearsOfExp      INTEGER     NOT NULL,
@@ -37,16 +37,16 @@ namespace HabitLogger
             return count;
         }
 
-        internal static DataTable GetCompanyByID(int ID)
+        internal static DataTable GetCompanyByID(int CompanyID)
         {
             using var connection = new SqliteConnection(ConnectionString);
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
-                    WHERE ID = $ID
+                    WHERE CompanyID = $CompanyID
                     ";
-            command.Parameters.AddWithValue("$ID", ID);
+            command.Parameters.AddWithValue("$CompanyID", CompanyID);
             using SqliteDataReader reader = command.ExecuteReader();
 
             DataTable resultSet = new DataTable();
@@ -62,8 +62,8 @@ namespace HabitLogger
             var command = connection.CreateCommand();
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
-                    WHERE ID < $ID_offset
-                    ORDER BY ID DESC
+                    WHERE CompanyID < $ID_offset
+                    ORDER BY CompanyID DESC
                     LIMIT 5
                     ";
             command.Parameters.AddWithValue("ID_offset", ID_offset);
@@ -72,7 +72,7 @@ namespace HabitLogger
             // Rows returned are in descending order and require sorting
             DataTable resultSet = new DataTable();
             resultSet.Load(reader);
-            resultSet.DefaultView.Sort = "ID ASC";
+            resultSet.DefaultView.Sort = "CompanyID ASC";
             resultSet = resultSet.DefaultView.ToTable();
 
             return resultSet;
@@ -85,8 +85,8 @@ namespace HabitLogger
             var command = connection.CreateCommand();
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
-                    WHERE ID > $ID_offset
-                    ORDER BY ID ASC
+                    WHERE CompanyID > $ID_offset
+                    ORDER BY CompanyID ASC
                     LIMIT 5;
                     ";
             command.Parameters.AddWithValue("ID_offset", ID_offset);
@@ -136,9 +136,9 @@ namespace HabitLogger
             command.CommandText = @"
                     UPDATE JuniorUnicornFirms
                     SET Name=$name, DesiredSkill=$skill, YearsOfExp=$yearsOfExp, Perk=$perk
-                    WHERE ID = $ID
+                    WHERE CompanyID = $CompanyID
                     ";
-            command.Parameters.AddWithValue("$ID", table.Rows[0]["ID"]);
+            command.Parameters.AddWithValue("$CompanyID", table.Rows[0]["CompanyID"]);
             command.Parameters.AddWithValue("$name", table.Rows[0]["Name"]);
             command.Parameters.AddWithValue("$skill", table.Rows[0]["DesiredSkill"]);
             command.Parameters.AddWithValue("$yearsOfExp", table.Rows[0]["YearsOfExp"]);

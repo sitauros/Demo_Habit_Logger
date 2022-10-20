@@ -105,18 +105,18 @@ Your input: ");
                 {
                     case 0:
                         currentPage = currentPage - 1;
-                        ID_offset = Convert.ToInt32(resultSet.Rows[0]["ID"]); // First record in result set
+                        ID_offset = Convert.ToInt32(resultSet.Rows[0]["CompanyID"]); // First record in result set
                         resultSet = Database.RetrievePageBeforeID(ID_offset);
-                        FormatPage(resultSet, numPages, currentPage);
+                        FormatPage(resultSet, numPages, currentPage, totalRecords);
                         break;
                     case 1:
                         continueLoop = false;
                         break;
                     case 2:
                         currentPage = currentPage + 1;
-                        ID_offset = Convert.ToInt32(resultSet.Rows[4]["ID"]); // Last record in result set
+                        ID_offset = Convert.ToInt32(resultSet.Rows[4]["CompanyID"]); // Last record in result set
                         resultSet = Database.RetrievePageAfterID(ID_offset);
-                        FormatPage(resultSet, numPages, currentPage);
+                        FormatPage(resultSet, numPages, currentPage, totalRecords);
                         break;
                 }
             }
@@ -151,12 +151,12 @@ Update an entry in the Unicorn Pride database
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Enter the company's ID: ");
 
-            int ID;
+            int CompanyID;
             var input = Console.ReadLine();
 
-            if (Int32.TryParse(input, out ID))
+            if (Int32.TryParse(input, out CompanyID))
             {
-                var resultSet = Database.GetCompanyByID(ID);
+                var resultSet = Database.GetCompanyByID(CompanyID);
 
                 if (resultSet.Rows.Count == 1)
                 {
@@ -201,7 +201,7 @@ Your input: ");
                     }
 
                     Database.UpdateCompany(resultSet);
-                    resultSet = Database.GetCompanyByID(ID);
+                    resultSet = Database.GetCompanyByID(CompanyID);
                     FormatTable(resultSet);
                     BackToMainMenu(return_message);
                 }
@@ -224,18 +224,18 @@ Delete an entry in the Unicorn Pride database
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Enter the company's ID: ");
 
-            int ID;
+            int CompanyID;
             var input = Console.ReadLine();
             
-            if (Int32.TryParse(input, out ID))
+            if (Int32.TryParse(input, out CompanyID))
             {
-                var resultSet = Database.GetCompanyByID(ID);
+                var resultSet = Database.GetCompanyByID(CompanyID);
 
                 if (resultSet.Rows.Count == 1)
                 {
-                    Database.DeleteCompany(ID);
+                    Database.DeleteCompany(CompanyID);
                     FormatTable(resultSet);
-                    BackToMainMenu("Company deleted with ID: " + ID);
+                    BackToMainMenu("Company deleted with ID: " + CompanyID);
                 }
                 else
                 {
