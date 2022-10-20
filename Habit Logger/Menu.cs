@@ -73,7 +73,7 @@ Your input: ");
             int ID_offset = 0;
             int currentPage = 1;
             int totalRecords = Database.GetRecordCount();
-            int numPages = 1 + (totalRecords / 5);
+            int numPages = CalculateNumPages(totalRecords);
 
             var resultSet = Database.RetrievePageAfterID(ID_offset);
             FormatPage(resultSet, numPages, currentPage);
@@ -314,5 +314,20 @@ Now viewing page " + currentPage + " of " + numPages +
 
             return input;
         }
+
+        private static int CalculateNumPages(int totalRecords)
+        {
+            int numPages;
+
+            if (totalRecords == 0)
+                numPages = 1;
+            else if (totalRecords % 5 == 0)
+                numPages = totalRecords / 5;
+            else
+                numPages = 1 + totalRecords / 5;
+
+            return numPages;
+        }
+
     }
 }
