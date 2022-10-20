@@ -145,12 +145,107 @@ Add a new company to the Unicorn Pride Database
 
         private static void UpdateCompany()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Update an entry in the Unicorn Pride database
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Enter the company's ID: ");
+
+            int ID;
+            var input = Console.ReadLine();
+
+            if (Int32.TryParse(input, out ID))
+            {
+                var resultSet = Database.GetCompanyByID(ID);
+
+                if (resultSet.Rows.Count == 1)
+                {
+                    FormatTable(resultSet);
+                    Console.WriteLine("Enter a number below: \n");
+                    Console.WriteLine(@"1) Update Company's name.
+2) Update Company's desired coding skill.
+3) Update Years of experience required.
+4) Update Company perk.
+
+Your input: ");
+
+                    var result = ValidateIntegerRange(1, 4);
+                    string return_message = "";
+
+                    switch (result)
+                    {
+                        case 1:
+                            Console.WriteLine("Enter the company's name: ");
+                            string companyName = ValidateUserString();
+                            resultSet.Rows[0]["Name"] = companyName;
+                            return_message = "Updated company's name to: " + companyName;
+                            break;
+                        case 2:
+                            Console.WriteLine("Enter desired coding skill: ");
+                            string skill = ValidateUserString();
+                            resultSet.Rows[0]["DesiredSkill"] = skill;
+                            return_message = "Updated company's desired skill to: " + skill;
+                            break;
+                        case 3:
+                            Console.WriteLine("Enter years of experience required (max: 10): ");
+                            int yearsOfExp = ValidateIntegerRange(0, 10);
+                            resultSet.Rows[0]["YearsOfExp"] = yearsOfExp;
+                            return_message = "Updated years of experience required to: " + yearsOfExp;
+                            break;
+                        case 4:
+                            Console.WriteLine("4) Enter company perk: ");
+                            string perk = ValidateUserString();
+                            resultSet.Rows[0]["Perk"] = perk;
+                            return_message = "Updated company's perk to : " + perk;
+                            break;
+                    }
+
+                    Database.UpdateCompany(resultSet);
+                    resultSet = Database.GetCompanyByID(ID);
+                    FormatTable(resultSet);
+                    BackToMainMenu(return_message);
+                }
+                else
+                {
+                    BackToMainMenu("Company not found with ID value: " + input);
+                }
+            }
+            else
+            {
+                BackToMainMenu("Input is not a number: " + input);
+            }
         }
 
         private static void DeleteCompany()
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Delete an entry in the Unicorn Pride database
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Enter the company's ID: ");
+
+            int ID;
+            var input = Console.ReadLine();
+            
+            if (Int32.TryParse(input, out ID))
+            {
+                var resultSet = Database.GetCompanyByID(ID);
+
+                if (resultSet.Rows.Count == 1)
+                {
+                    Database.DeleteCompany(ID);
+                    FormatTable(resultSet);
+                    BackToMainMenu("Company deleted with ID: " + ID);
+                }
+                else
+                {
+                    BackToMainMenu("Company not found with ID value: " + input);
+                }
+            }
+            else
+            {
+                BackToMainMenu("Input is not a number: " + input);
+            }
         }
 
         private static void ExitProgram()

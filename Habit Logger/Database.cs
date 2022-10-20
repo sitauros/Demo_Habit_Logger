@@ -37,6 +37,24 @@ namespace HabitLogger
             return count;
         }
 
+        internal static DataTable GetCompanyByID(int ID)
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                    SELECT * FROM JuniorUnicornFirms
+                    WHERE ID = $ID
+                    ";
+            command.Parameters.AddWithValue("$ID", ID);
+            using SqliteDataReader reader = command.ExecuteReader();
+
+            DataTable resultSet = new DataTable();
+            resultSet.Load(reader);
+
+            return resultSet;
+        }
+
         internal static DataTable RetrievePageBeforeID(int ID_offset)
         {
             using var connection = new SqliteConnection(ConnectionString);
@@ -94,6 +112,37 @@ namespace HabitLogger
             command.Parameters.AddWithValue("$skill", skill);
             command.Parameters.AddWithValue("$yearsOfExp", yearsOfExp);
             command.Parameters.AddWithValue("$perk", perk);
+            command.ExecuteNonQuery();
+        }
+
+        internal static void DeleteCompany(int ID)
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                    DELETE FROM JuniorUnicornFirms 
+                    WHERE ID = $ID
+                    ";
+            command.Parameters.AddWithValue("$ID", ID);
+            command.ExecuteNonQuery();
+        }
+
+        internal static void UpdateCompany(DataTable table)
+        {
+            using var connection = new SqliteConnection(ConnectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                    UPDATE JuniorUnicornFirms
+                    SET Name=$name, DesiredSkill=$skill, YearsOfExp=$yearsOfExp, Perk=$perk
+                    WHERE ID = $ID
+                    ";
+            command.Parameters.AddWithValue("$ID", table.Rows[0]["ID"]);
+            command.Parameters.AddWithValue("$name", table.Rows[0]["Name"]);
+            command.Parameters.AddWithValue("$skill", table.Rows[0]["DesiredSkill"]);
+            command.Parameters.AddWithValue("$yearsOfExp", table.Rows[0]["YearsOfExp"]);
+            command.Parameters.AddWithValue("$perk", table.Rows[0]["Perk"]);
             command.ExecuteNonQuery();
         }
     }
