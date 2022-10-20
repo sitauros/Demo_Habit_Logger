@@ -123,23 +123,6 @@ Your input: ");
 
             PrintMainMenu();
         }
-        
-        private static void FormatPage(DataTable resultSet, int numPages, int currentPage)
-        {
-            Console.Clear();
-            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-Showing companies listed in the Unicorn Pride Database
-Now viewing page " + currentPage + " of " + numPages +
-"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=" + "\n");
-
-            ConsoleTableBuilder
-               .From(resultSet)
-               .WithColumn("Id", "Company", "Skill", "Years of Exp.", "Perk")
-               .WithTextAlignment(TextAlignments)
-               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition)
-               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition, CharMapPositions)
-               .ExportAndWriteLine(TableAligntment.Center);
-        }
 
         private static void AddNewCompany()
         {
@@ -183,6 +166,58 @@ Add a new company to the Unicorn Pride Database
             Console.WriteLine("-----------------------------------------------------------------------------------");
             Console.ReadLine();
             PrintMainMenu();
+        }
+
+        private static void FormatPage(DataTable resultSet, int numPages, int currentPage)
+        {
+            Console.Clear();
+            Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Showing companies listed in the Unicorn Pride Database
+Now viewing page " + currentPage + " of " + numPages +
+"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=" + "\n");
+
+            FormatTable(resultSet);
+        }
+
+        private static void FormatTable(DataTable resultSet)
+        {
+            ConsoleTableBuilder
+               .From(resultSet)
+               .WithColumn("Id", "Company", "Skill", "Years of Exp.", "Perk")
+               .WithTextAlignment(TextAlignments)
+               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition)
+               .WithCharMapDefinition(CharMapDefinition.FramePipDefinition, CharMapPositions)
+               .ExportAndWriteLine(TableAligntment.Center);
+        }
+
+        internal static int ValidateIntegerRange(int minValue, int maxValue)
+        {
+            int result;
+            var input = Console.ReadLine();
+            bool isValidInput = int.TryParse(input, out result);
+
+            while (!isValidInput || result < minValue || result > maxValue)
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine("Your input: ");
+                isValidInput = int.TryParse(Console.ReadLine(), out result);
+            }
+
+            return result;
+        }
+
+        internal static string ValidateUserString()
+        {
+            string? input = Console.ReadLine();
+
+            while (String.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+                Console.WriteLine("Your input: ");
+                input = Console.ReadLine();
+            }
+
+            return input;
         }
     }
 }
