@@ -197,7 +197,7 @@ Your input: ");
                             Console.WriteLine("4) Enter company perk: ");
                             string perk = ValidateUserString();
                             resultSet.Rows[0]["Perk"] = perk;
-                            return_message = "Updated company's perk to : " + perk;
+                            return_message = "Updated company's perk to: " + perk;
                             break;
                     }
 
