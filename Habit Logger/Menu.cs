@@ -76,7 +76,7 @@ Your input: ");
             int numPages = CalculateNumPages(totalRecords);
 
             var resultSet = Database.RetrievePageAfterID(ID_offset);
-            FormatPage(resultSet, numPages, currentPage);
+            FormatPage(resultSet, numPages, currentPage, totalRecords);
 
             while (continueLoop)
             {
@@ -139,7 +139,8 @@ Add a new company to the Unicorn Pride Database
             Console.WriteLine("4) Enter company perk: ");
             string perk = ValidateUserString();
 
-            Database.AddNewCompany(companyName, skill, yearsOfExp, perk);
+            var resultSet = Database.AddNewCompany(companyName, skill, yearsOfExp, perk);
+            FormatTable(resultSet);
             BackToMainMenu("New company added.");
         }
 
@@ -263,13 +264,13 @@ Enter the company's ID: ");
             PrintMainMenu();
         }
 
-        private static void FormatPage(DataTable resultSet, int numPages, int currentPage)
+        private static void FormatPage(DataTable resultSet, int numPages, int currentPage, int totalRecords)
         {
             Console.Clear();
             Console.WriteLine(@"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Showing companies listed in the Unicorn Pride Database
 Now viewing page " + currentPage + " of " + numPages +
-"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=" + "\n");
+"\n Total: " + totalRecords + "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=" + "\n");
 
             FormatTable(resultSet);
         }

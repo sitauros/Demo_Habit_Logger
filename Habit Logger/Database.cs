@@ -99,7 +99,7 @@ namespace HabitLogger
             return resultSet;
         }
 
-        internal static void AddNewCompany(string name, string skill, int yearsOfExp, string perk)
+        internal static DataTable AddNewCompany(string name, string skill, int yearsOfExp, string perk)
         {
             using var connection = new SqliteConnection(ConnectionString);
             connection.Open();
@@ -113,18 +113,33 @@ namespace HabitLogger
             command.Parameters.AddWithValue("$yearsOfExp", yearsOfExp);
             command.Parameters.AddWithValue("$perk", perk);
             command.ExecuteNonQuery();
+
+            command.CommandText = @"
+                    SELECT * FROM JuniorUnicornFirms
+                    WHERE Name=$name 
+                    AND DesiredSkill=$skill 
+                    AND YearsOfExp=$yearsOfExp
+                    AND Perk=$perk
+                    ";
+
+            using SqliteDataReader reader = command.ExecuteReader();
+
+            DataTable resultSet = new DataTable();
+            resultSet.Load(reader);
+
+            return resultSet;
         }
 
-        internal static void DeleteCompany(int ID)
+        internal static void DeleteCompany(int CompanyID)
         {
             using var connection = new SqliteConnection(ConnectionString);
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText = @"
                     DELETE FROM JuniorUnicornFirms 
-                    WHERE ID = $ID
+                    WHERE CompanyID = $CompanyID
                     ";
-            command.Parameters.AddWithValue("$ID", ID);
+            command.Parameters.AddWithValue("$CompanyID", CompanyID);
             command.ExecuteNonQuery();
         }
 
