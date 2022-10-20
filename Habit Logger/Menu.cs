@@ -45,7 +45,7 @@ Enter a number below:
 
 Your input: ");
 
-            var result = ValidateUserInteger(0, 4);
+            var result = ValidateIntegerRange(0, 4);
 
             switch (result)
             {
@@ -65,36 +65,6 @@ Your input: ");
                     ExitProgram();
                     break;         
             }
-        }
-
-        internal static int ValidateUserInteger(int minValue, int maxValue)
-        {
-            int result;
-            var input = Console.ReadLine();
-            bool isValidInput = int.TryParse(input, out result);
-
-            while (!isValidInput || result < minValue || result > maxValue)
-            {
-                Console.WriteLine("Invalid input. Please try again.");
-                Console.WriteLine("Your input: ");
-                isValidInput = int.TryParse(Console.ReadLine(), out result);
-            }
-
-            return result;
-        }
-
-        internal static string ValidateUserString()
-        {
-            string? input = Console.ReadLine();
-
-            while (String.IsNullOrEmpty(input))
-            {
-                Console.WriteLine("Invalid input. Please try again.");
-                Console.WriteLine("Your input: ");
-                input = Console.ReadLine();
-            }
-
-            return input;
         }
 
         private static void ListAllCompanies()
@@ -127,14 +97,15 @@ Your input: ");
                     Console.WriteLine("2) Advance to next page. ");
                     maxValue = 2;
                 }
-                
-                var result = ValidateUserInteger(minValue, maxValue);
+
+                Console.WriteLine("\nYour input: ");
+                var result = ValidateIntegerRange(minValue, maxValue);
 
                 switch (result)
                 {
                     case 0:
                         currentPage = currentPage - 1;
-                        ID_offset = Convert.ToInt32(resultSet.Rows[0]["ID"]);
+                        ID_offset = Convert.ToInt32(resultSet.Rows[0]["ID"]); // First record in result set
                         resultSet = Database.RetrievePageBeforeID(ID_offset);
                         FormatPage(resultSet, numPages, currentPage);
                         break;
@@ -143,7 +114,7 @@ Your input: ");
                         break;
                     case 2:
                         currentPage = currentPage + 1;
-                        ID_offset = Convert.ToInt32(resultSet.Rows[4]["ID"]);
+                        ID_offset = Convert.ToInt32(resultSet.Rows[4]["ID"]); // Last record in result set
                         resultSet = Database.RetrievePageAfterID(ID_offset);
                         FormatPage(resultSet, numPages, currentPage);
                         break;
@@ -181,7 +152,7 @@ Add a new company to the Unicorn Pride Database
             Console.WriteLine("2) Enter desired coding skill: ");
             string skill = ValidateUserString();
             Console.WriteLine("3) Enter years of experience required (max: 10): ");
-            int yearsOfExp = ValidateUserInteger(0, 10);
+            int yearsOfExp = ValidateIntegerRange(0, 10);
             Console.WriteLine("4) Enter company perk: ");
             string perk = ValidateUserString();
 

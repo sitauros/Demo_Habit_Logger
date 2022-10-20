@@ -51,8 +51,7 @@ namespace HabitLogger
             command.Parameters.AddWithValue("ID_offset", ID_offset);
 
             using SqliteDataReader reader = command.ExecuteReader();
-
-            // Rows returned are in descending order
+            // Rows returned are in descending order and require sorting
             DataTable resultSet = new DataTable();
             resultSet.Load(reader);
             resultSet.DefaultView.Sort = "ID ASC";
