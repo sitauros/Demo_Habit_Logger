@@ -116,8 +116,8 @@ namespace HabitLogger
 
             command.CommandText = @"
                     SELECT * FROM JuniorUnicornFirms
-                    WHERE Name=$name 
-                    AND DesiredSkill=$skill 
+                    WHERE Name=$name
+                    AND DesiredSkill=$skill
                     AND YearsOfExp=$yearsOfExp
                     AND Perk=$perk
                     ";
