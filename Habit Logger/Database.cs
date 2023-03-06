@@ -32,7 +32,7 @@ namespace HabitLogger
                     SELECT COUNT(*) FROM JuniorUnicornFirms
                     ";
 
-            int count = Convert.ToInt32((Int64?)command.ExecuteScalar());
+            int count = Convert.ToInt32(command.ExecuteScalar());
 
             return count;
         }
