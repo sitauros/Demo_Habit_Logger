@@ -26,6 +26,6 @@ Safeguard your mane from predatory firms today!
 * Recite your predator's ID to purge the fiend from the database.
 
 ## Useful Links
-* [C# Academy](https://www.thecsharpacademy.com/habit-tracker/) - Lists the original project requirements
+* [C# Academy](https://www.thecsharpacademy.com/project/12) - Lists the original project requirements
 * [ConsoleTableExt](https://github.com/minhhungit/ConsoleTableExt) - Used to format the tables in C# console applications
 * [Dev.to](https://dev.to/appwrite/this-is-why-you-should-use-cursor-pagination-4nh5) - Article comparing cursor and offset-based pagination
