@@ -120,6 +120,8 @@ namespace HabitLogger
                     AND DesiredSkill=$skill
                     AND YearsOfExp=$yearsOfExp
                     AND Perk=$perk
+                    ORDER BY CompanyID DESC
+                    LIMIT 1
                     ";
 
             using SqliteDataReader reader = command.ExecuteReader();

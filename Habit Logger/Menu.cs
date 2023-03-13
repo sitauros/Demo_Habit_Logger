@@ -261,6 +261,7 @@ Enter the company's ID: ");
             Console.WriteLine("Press any key to return to main menu.");
             Console.WriteLine("-----------------------------------------------------------------------------------");
             Console.ReadLine();
+            
             PrintMainMenu();
         }
 
