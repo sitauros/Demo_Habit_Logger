@@ -1,4 +1,4 @@
-# Demo_Habit_Logger
+# Habit Logger
 ![List Company](https://i.imgur.com/DYIPTgo.gif)  
 The life of a junior unicorn is fraught with peril and predators.  
 Only a cognizant eye and associative memory offers any real chance at survival.  
